@@ -101,10 +101,8 @@ ExprPtr make_expression(Args&&... args) {
 }
 
 // Functions
-const Token& token(const Expression& expr);
-std::string token_literal(const Expression& expr);
 std::string to_string(const Expression& expr);
-bool equal(const Expression& lhs, const Expression& rhs);
+// bool equal(const Expression& lhs, const Expression& rhs);
 
 } // namespace edp::ast
 

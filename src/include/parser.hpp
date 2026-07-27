@@ -2,9 +2,9 @@
 #define EDP_PARSER_HPP
 
 #include "ast.hpp"
+#include "lexer.hpp"
 #include "precedences.hpp"
 #include "tokens.hpp"
-#include "lexer.hpp"
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -14,21 +14,19 @@ namespace edp::parser {
 
 class ParserError : public std::runtime_error {
 public:
-    explicit ParserError(const std::vector<std::string>& errors)
-        : std::runtime_error(join_msgs(errors))
-    {}
+  explicit ParserError(const std::vector<std::string>& errors)
+      : std::runtime_error(join_msgs(errors)) {}
 
 private:
-    static std::string join_msgs(const std::vector<std::string>& errors)
-    {
-        std::string result = "Parser errors:\n";
+  static std::string join_msgs(const std::vector<std::string>& errors) {
+    std::string result = "Parser errors:\n";
 
-        for (const auto& error : errors) {
-            result += "  - " + error + '\n';
-        }
-
-        return result;
+    for (const auto& error : errors) {
+      result += "  - " + error + '\n';
     }
+
+    return result;
+  }
 };
 
 class Parser {
@@ -36,7 +34,7 @@ class Parser {
 public:
   explicit Parser(Lexer lexer);
 
-    ast::ExprPtr parse();
+  ast::ExprPtr parse();
   bool has_errors();
 
 private:
@@ -81,7 +79,6 @@ private:
   ast::ExprPtr parse_infix_expression(ast::ExprPtr left_expr);
   ast::ExprPtr parse_function_expression(ast::ExprPtr expr);
   std::vector<ast::ExprPtr> parse_list_of_expressions(TokenTypes end_token);
-
 };
 
 } // namespace edp::parser
