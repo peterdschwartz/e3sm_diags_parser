@@ -18,13 +18,13 @@ bool is_numeric(const char ch) {
 namespace edp {
 
 Lexer::Lexer(std::string input)
-    : input_(std::move(input)), position_(0), read_position_(0),
-      current_char_('\0') {
-  // put an advance here?
+    : input_{std::move(input)}, position_{0}, read_position_{0},
+      current_char_{'\0'} {
+  read_char();
 }
 
 void Lexer::read_char() {
-  if (position_ >= input_.length()) {
+  if (read_position_ >= input_.length()) {
     current_char_ = '\0';
   } else {
     current_char_ = input_.at(read_position_);
@@ -57,7 +57,7 @@ std::string Lexer::read_to_delim(char ch) {
     read_char();
   }
   read_char();
-  auto count = position_ - start_pos + 1;
+  auto count = position_ - start_pos;
   return input_.substr(start_pos, count);
 }
 
@@ -70,11 +70,12 @@ std::string Lexer::read_number() {
     }
   }
   check_precision();
+  return input_.substr(start_pos, position_ - start_pos);
 }
 
 void Lexer::check_precision() {
   const auto peek_ch = peek_char();
-  if (peek_ch == ' ' || peek_ch == '\t') {
+  if (std::isspace(static_cast<unsigned char>(peek_ch))) {
     return;
   }
   if (current_char_ == 'e') {
@@ -92,7 +93,7 @@ std::string Lexer::read_identifier() {
   while (is_valid_identifier(current_char_)) {
     read_char();
   }
-  auto length = position_ - start_pos + 1;
+  auto length = position_ - start_pos;
   return input_.substr(start_pos, length);
 }
 
@@ -164,8 +165,7 @@ Token Lexer::next_token() {
     }
     break;
   case '\0':
-    tok = make_token(TokenTypes::EndofFile);
-    break;
+    return{TokenTypes::EndofFile, ""};
   case ':':
     tok = make_token(TokenTypes::Colon);
     break;
@@ -184,7 +184,7 @@ Token Lexer::next_token() {
   default: {
 
     if (is_valid_identifier(current_char_)) {
-      return {TokenTypes::Identifer, read_identifier()};
+      return identifier_lookup({TokenTypes::Identifier, read_identifier()});
     } else if (is_numeric(current_char_)) {
       auto number = read_number();
 
