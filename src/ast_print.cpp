@@ -59,7 +59,7 @@ std::string ToStringVisitor::operator()(const ArrayExpression& expr) const {
 };
 
 std::string ToStringVisitor::operator()(const StringLiteral& expr) const {
-  return expr.value;
+  return "'" + expr.value + "'";
 };
 std::string ToStringVisitor::operator()(const IntegerLiteral& expr) const {
   return std::to_string(expr.value);

@@ -6,6 +6,7 @@ add_library(e3sm_diags_parser
 src/lexer.cpp
 src/ast_print.cpp
 src/tokens.cpp
+src/precedences.cpp
 src/parser.cpp
 )
 
@@ -29,7 +30,7 @@ if(BUILD_TESTING)
 
     add_executable(edp_tests
         tests/test_lexer.cpp
-        # tests/ast_tests.cpp
+        tests/test_parser.cpp
     )
 
     target_link_libraries(

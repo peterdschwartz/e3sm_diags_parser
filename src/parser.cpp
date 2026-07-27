@@ -2,6 +2,7 @@
 #include "ast.hpp"
 #include "precedences.hpp"
 #include "tokens.hpp"
+#include <iostream>
 #include <stdexcept>
 #include <string>
 
@@ -32,9 +33,14 @@ Precedence Parser::peek_precedence() {
   return token_precedence(peek_token_.type);
 }
 
+bool Parser::has_errors() { return !errors_.empty(); }
+
 void Parser::next_token() {
   cur_token_ = peek_token_;
   peek_token_ = lexer_.next_token();
+  if (peek_token_is(TokenTypes::Illegal)) {
+    std::cout << "Encountered Illegal Token: " << to_string(peek_token_);
+  }
 }
 
 ast::ExprPtr Parser::parse_expression(Precedence prec) {
@@ -45,7 +51,7 @@ ast::ExprPtr Parser::parse_expression(Precedence prec) {
   const auto fn = prefix->second;
   auto left_expr = (this->*fn)();
 
-  while (!peek_token_is(TokenTypes::Newline) && prec < peek_precedence()) {
+  while (!peek_token_is(TokenTypes::EndofFile) && prec < peek_precedence()) {
     const auto infix_it = infix_parse_fns_.find(peek_token_.type);
     if (infix_it == infix_parse_fns_.end()) {
       return left_expr;
@@ -105,17 +111,17 @@ Parser::parse_list_of_expressions(TokenTypes end_token) {
     next_token();
     return expressions;
   }
-
   next_token();
+
   expressions.push_back(parse_expression(Precedence::Lowest));
   // should this be an input arg as well ...?
   while (peek_token_is(TokenTypes::Comma)) {
     next_token();
-    next_token();
+    next_token(); // Comma should be consumed
     expressions.push_back(parse_expression(Precedence::Lowest));
   }
 
-  if (!expect_peek_and_advance(TokenTypes::RightParen)) {
+  if (!expect_peek_and_advance(end_token)) {
     // may prefer a throw
     throw std::runtime_error("Unexpected Token at end of list " +
                              to_string(cur_token_));
@@ -134,8 +140,9 @@ ast::ExprPtr Parser::parse_array_expression() {
       parse_list_of_expressions(TokenTypes::ArrayRightBracket));
 }
 
-Parser::Parser(Lexer lexer) : lexer_{std::move(lexer)},
-prefix_parse_fns_{{
+Parser::Parser(Lexer lexer)
+    : lexer_{std::move(lexer)},
+      prefix_parse_fns_{{
           {TokenTypes::Identifier, &Parser::parse_identifier},
           {TokenTypes::Integer, &Parser::parse_integer_literal},
           {TokenTypes::Float, &Parser::parse_float_literal},
@@ -161,6 +168,20 @@ prefix_parse_fns_{{
           {TokenTypes::And, &Parser::parse_infix_expression},
           {TokenTypes::Dot, &Parser::parse_infix_expression},
           {TokenTypes::LeftParen, &Parser::parse_function_expression},
-      }}{}
+      }} {
+  next_token();
+  next_token();
+}
+
+ast::ExprPtr Parser::parse() {
+  // For now i'll assume we're parsing one expression statement at a time
+  // and nothing more complicated
+  auto expr = parse_expression(Precedence::Lowest);
+
+  if (has_errors()) {
+    throw ParserError(errors_);
+  }
+  return expr;
+}
 
 } // namespace edp::parser

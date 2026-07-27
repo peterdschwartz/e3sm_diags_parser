@@ -36,7 +36,7 @@ class Parser {
 public:
   explicit Parser(Lexer lexer);
 
-  void parse();
+    ast::ExprPtr parse();
   bool has_errors();
 
 private:

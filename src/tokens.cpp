@@ -113,8 +113,14 @@ std::string binary_op_to_string(const TokenTypes type) {
     return "<";
   case TokenTypes::GreaterThan:
     return ">";
+  case TokenTypes::Assign:
+    return "=";
+  case TokenTypes::Exp:
+    return "**";
+  case TokenTypes::Dot:
+    return ".";
   default:
-    throw std::invalid_argument{"Invalid Binary Operator"};
+    throw std::invalid_argument{"Invalid Binary Operator" + std::string(to_string(type))};
   }
 }
 

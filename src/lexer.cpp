@@ -1,5 +1,6 @@
 #include "lexer.hpp"
 #include "tokens.hpp"
+#include <algorithm>
 #include <cctype>
 #include <utility>
 
@@ -20,6 +21,10 @@ namespace edp {
 Lexer::Lexer(std::string input)
     : input_{std::move(input)}, position_{0}, read_position_{0},
       current_char_{'\0'} {
+
+  std::transform(
+      input_.begin(), input_.end(), input_.begin(),
+      [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
   read_char();
 }
 
@@ -52,7 +57,7 @@ Token Lexer::make_token(TokenTypes kind) const {
 }
 
 std::string Lexer::read_to_delim(char ch) {
-  auto start_pos = position_;
+  auto start_pos = position_+1;
   while (peek_char() != ch) {
     read_char();
   }
@@ -165,7 +170,7 @@ Token Lexer::next_token() {
     }
     break;
   case '\0':
-    return{TokenTypes::EndofFile, ""};
+    return {TokenTypes::EndofFile, ""};
   case ':':
     tok = make_token(TokenTypes::Colon);
     break;
@@ -179,7 +184,10 @@ Token Lexer::next_token() {
       auto number = read_number();
       number.insert(0, "0.");
       return {TokenTypes::Float, number};
-    }
+    } else {
+        tok = make_token(TokenTypes::Dot);
+        break;
+      }
   }
   default: {
 
