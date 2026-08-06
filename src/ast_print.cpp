@@ -1,6 +1,7 @@
 #include <edp/ast.hpp>
 #include <edp/tokens.hpp>
 #include <algorithm>
+#include <format>
 #include <span>
 
 /**
@@ -65,7 +66,7 @@ std::string ToStringVisitor::operator()(const IntegerLiteral& expr) const {
   return std::to_string(expr.value);
 };
 std::string ToStringVisitor::operator()(const FloatLiteral& expr) const {
-  return std::to_string(expr.value);
+  return std::format("{:e}", expr.value);
 };
 
 } // namespace
