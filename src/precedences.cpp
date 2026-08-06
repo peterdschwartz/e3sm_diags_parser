@@ -1,5 +1,5 @@
-#include "tokens.hpp"
-#include "precedences.hpp"
+#include <edp/tokens.hpp>
+#include <edp/precedences.hpp>
 #include <stdexcept>
 
 namespace edp::parser {

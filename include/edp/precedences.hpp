@@ -1,6 +1,6 @@
 #pragma once // becoming lazy
 
-#include "tokens.hpp"
+#include <edp/tokens.hpp>
 namespace edp::parser {
 
 enum class Precedence {

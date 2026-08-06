@@ -1,7 +1,7 @@
-#include "parser.hpp"
-#include "ast.hpp"
-#include "precedences.hpp"
-#include "tokens.hpp"
+#include <edp/parser.hpp>
+#include <edp/ast.hpp>
+#include <edp/precedences.hpp>
+#include <edp/tokens.hpp>
 #include <iostream>
 #include <stdexcept>
 #include <string>

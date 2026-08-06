@@ -22,7 +22,7 @@ target_compile_features(e3sm_diags_parser PUBLIC cxx_std_20)
 target_include_directories(
     e3sm_diags_parser
     PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 include(CTest)
 if(BUILD_TESTING)

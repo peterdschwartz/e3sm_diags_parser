@@ -1,8 +1,8 @@
-#include "ast.hpp"
+#include <edp/ast.hpp>
 #include "catch2/catch_message.hpp"
-#include "lexer.hpp"
-#include "parser.hpp"
-#include "tokens.hpp"
+#include <edp/lexer.hpp>
+#include <edp/parser.hpp>
+#include <edp/tokens.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <iostream>
 

@@ -1,10 +1,10 @@
 #ifndef EDP_PARSER_HPP
 #define EDP_PARSER_HPP
 
-#include "ast.hpp"
-#include "lexer.hpp"
-#include "precedences.hpp"
-#include "tokens.hpp"
+#include <edp/ast.hpp>
+#include <edp/lexer.hpp>
+#include <edp/precedences.hpp>
+#include <edp/tokens.hpp>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>

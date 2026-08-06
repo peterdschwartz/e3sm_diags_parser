@@ -1,7 +1,7 @@
 #ifndef EDP_LEXER_HPP
 #define EDP_LEXER_HPP
 
-#include "tokens.hpp"
+#include <edp/tokens.hpp>
 #include <string>
 
 namespace edp {

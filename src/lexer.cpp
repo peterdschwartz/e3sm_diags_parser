@@ -1,5 +1,5 @@
-#include "lexer.hpp"
-#include "tokens.hpp"
+#include <edp/lexer.hpp>
+#include <edp/tokens.hpp>
 #include <algorithm>
 #include <cctype>
 #include <utility>
