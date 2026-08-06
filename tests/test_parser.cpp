@@ -9,8 +9,7 @@
 namespace edp {
 
 TEST_CASE("Test Parse expressions") {
-  std::string input = "x*y.derivative(dx=dy,['col'])";
-  // std::string input = "[1, 'col', 2]";
+  std::string input = "x*y.derivative(dx=dy,['col']).where(x>0)";
 
   parser::Parser parser{Lexer{input}};
 
@@ -18,7 +17,7 @@ TEST_CASE("Test Parse expressions") {
   auto str_ = to_string(*expr);
   std::cout << "Parsed Expression: \n" << str_;
   INFO("Parsed Expression: \n" << str_);
-  CHECK(str_ == "((x*y).derivative((dx=dy), ['col']))");
+  CHECK(str_ == "(x*((y.derivative((dx=dy), ['col'])).where((x>0))))");
 }
 
 } // namespace edp

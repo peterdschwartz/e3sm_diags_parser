@@ -10,6 +10,14 @@ src/precedences.cpp
 src/parser.cpp
 )
 
+add_executable(edp 
+tools/edp.cpp
+)
+target_link_libraries(edp
+    PRIVATE
+    e3sm_diags_parser
+)
+
 target_compile_features(e3sm_diags_parser PUBLIC cxx_std_20)
 target_include_directories(
     e3sm_diags_parser
